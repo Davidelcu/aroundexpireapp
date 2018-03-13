@@ -93,10 +93,8 @@ public class Item {
      */
     @Override
     public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", insertionDate=" + insertionDate +
-                ", expireDate=" + expireDate +
-                '}';
+        return "Product: " +
+                 name + " - Added: " + insertionDate +
+                " - Expire: " + expireDate;
     }
 }

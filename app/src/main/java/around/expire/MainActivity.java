@@ -1,6 +1,10 @@
 package around.expire;
 
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.util.List;
 
@@ -23,7 +33,7 @@ import around.expire.database.ItemDataSource;
  */
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
+    SwipeMenuListView listView;
     FloatingActionButton fab;
     private ItemDataSource itemData;
 
@@ -44,7 +54,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //get data from database and store in listview
-        listView = findViewById(R.id.listViewItem);
+        listView = findViewById(R.id.swipeListViewItem);
+        slideList();
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Item item = null;
+                switch (index) {
+                    case 0:
+
+                        break;
+                    case 1:
+                        if(position > 0) {
+                            item = (Item) listView.getItemAtPosition(position);
+                            itemData.deleteItem(item);
+                            Context context = getApplicationContext();
+                            Toast toast = Toast.makeText(context, "Item delete at: " + position, Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
 
         itemData = new ItemDataSource(this);
         itemData.open();
@@ -52,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         List<Item> values = itemData.getAllItem();
         ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
-
     }
 
 
@@ -61,6 +93,30 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void slideList() {
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                SwipeMenuItem editItem = new SwipeMenuItem(getApplicationContext());
+                editItem.setBackground(new ColorDrawable(Color.rgb(255,255,153)));
+                editItem.setWidth(250);
+                editItem.setTitle("Edit");
+                editItem.setTitleSize(18);
+                editItem.setTitleColor(Color.BLACK);
+                menu.addMenuItem(editItem);
+
+                SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(204,0,0)));
+                deleteItem.setWidth(250);
+                deleteItem.setTitle("Delete");
+                deleteItem.setTitleSize(18);
+                deleteItem.setTitleColor(Color.BLACK);
+                menu.addMenuItem(deleteItem);
+            }
+        };
+
+        listView.setMenuCreator(creator);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
