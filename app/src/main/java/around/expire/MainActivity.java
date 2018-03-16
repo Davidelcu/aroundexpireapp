@@ -1,6 +1,5 @@
 package around.expire;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -60,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Item item = null;
+                Item item;
                 switch (index) {
                     case 0:
 
                         break;
                     case 1:
-                        if(position > 0) {
+                        if(position >= 0) {
                             item = (Item) listView.getItemAtPosition(position);
                             itemData.deleteItem(item);
                             Context context = getApplicationContext();
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         itemData.open();
 
         List<Item> values = itemData.getAllItem();
-        ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, values);
+        ArrayAdapter<Item> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
     }
 

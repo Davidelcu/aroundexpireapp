@@ -1,5 +1,6 @@
 package around.expire;
 
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import around.expire.database.ItemDataSource;
@@ -19,7 +21,7 @@ import around.expire.database.ItemDataSource;
  */
 public class addActivity extends AppCompatActivity {
 
-    Button saveButton;
+    Button saveButton, datePickerButton;
     EditText addTextItem, addDateItem;
     private ItemDataSource itemData;
     /**
@@ -34,6 +36,7 @@ public class addActivity extends AppCompatActivity {
 
         saveButton = findViewById(R.id.addSaveButton);
         addTextItem = findViewById(R.id.editItemText);
+        datePickerButton = findViewById(R.id.getDatePicker);
         addDateItem = findViewById(R.id.editDateText);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -52,12 +55,13 @@ public class addActivity extends AppCompatActivity {
      */
     private void saveToMain() {
         String itemName = addTextItem.getText().toString();
-        Date today = new Date();
-        Integer insertionDate = today.getDate();
-        if(itemName != null) {
+
+        String expirationDate = addDateItem.getText().toString();
+
+        if(!itemName.isEmpty() && !expirationDate.isEmpty()) {
             itemData = new ItemDataSource(this);
             itemData.open();
-            itemData.createItem(itemName, insertionDate, insertionDate);
+            itemData.createItem(itemName, expirationDate);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {

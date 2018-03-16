@@ -10,8 +10,8 @@ package around.expire.database;
 public class Item {
     private long id;
     private String name;
-    private int insertionDate;
-    private int expireDate;
+    private String insertionDate;
+    private String expireDate;
 
     /**
      *getId
@@ -54,7 +54,7 @@ public class Item {
      *
      * @return int insertionDate
      */
-    public int getInsertionDate() {
+    public String getInsertionDate() {
         return insertionDate;
     }
 
@@ -64,7 +64,7 @@ public class Item {
      *
      * @param insertionDate insertiondate
      */
-    public void setInsertionDate(int insertionDate) {
+    public void setInsertionDate(String insertionDate) {
         this.insertionDate = insertionDate;
     }
 
@@ -73,7 +73,7 @@ public class Item {
      *
      * @return expireDate
      */
-    public int getExpireDate() {
+    public String getExpireDate() {
         return expireDate;
     }
 
@@ -82,7 +82,7 @@ public class Item {
      *
      * @param expireDate expiredate
      */
-    public void setExpireDate(int expireDate) {
+    public void setExpireDate(String expireDate) {
         this.expireDate = expireDate;
     }
 

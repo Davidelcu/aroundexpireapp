@@ -5,9 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import java.util.ArrayList;
-import java.util.List;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -43,17 +46,31 @@ public class ItemDataSource {
      * @param expirationDate expirationDate
      * @return newItem
      */
-    public Item createItem(String name, Integer insertionDate, Integer expirationDate) {
+    public Item createItem(String name, String expirationDate) {
         ContentValues values = new ContentValues();
         values.put(LocalDBHelper.ITEM_COLUMN_NAME, name);
-        values.put(LocalDBHelper.ITEM_COLUMN_INSERTION_DATE, insertionDate);
+        values.put(LocalDBHelper.ITEM_COLUMN_INSERTION_DATE, getDateTime());
         values.put(LocalDBHelper.ITEM_COLUMN_EXPIRE_DATE, expirationDate);
-        long insterId = database.insert(LocalDBHelper.ITEM_TABLE_NAME, null, values);
-        Cursor cursor = database.query(LocalDBHelper.ITEM_TABLE_NAME, allColumns, LocalDBHelper.ITEM_COLUMN_ID + " = " + insterId, null, null, null, null);
+        long insertId = database.insert(LocalDBHelper.ITEM_TABLE_NAME, null, values);
+        Cursor cursor = database.query(LocalDBHelper.ITEM_TABLE_NAME, allColumns, LocalDBHelper.ITEM_COLUMN_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Item newItem = cursorToItem(cursor);
         cursor.close();
         return newItem;
+    }
+
+    /**
+     *getDateTime
+     *
+     * insert current date, on create of an item, in the database
+     *
+     * @return current date
+     */
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     /**
@@ -79,7 +96,7 @@ public class ItemDataSource {
      * @param expirationDate expiration date
      * @return true
      */
-    public boolean updateItem(Long id, String name, Integer expirationDate) {
+    public boolean updateItem(Long id, String name, String expirationDate) {
         ContentValues values = new ContentValues();
         values.put(LocalDBHelper.ITEM_COLUMN_NAME, name);
         values.put(LocalDBHelper.ITEM_COLUMN_EXPIRE_DATE, expirationDate);
@@ -123,8 +140,8 @@ public class ItemDataSource {
         Item item = new Item();
         item.setId(cursor.getLong(0));
         item.setName(cursor.getString(1));
-        item.setInsertionDate(cursor.getInt(2));
-        item.setExpireDate((cursor.getInt(3)));
+        item.setInsertionDate(cursor.getString(2));
+        item.setExpireDate((cursor.getString(3)));
         return item;
     }
 }
