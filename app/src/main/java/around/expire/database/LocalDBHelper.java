@@ -30,8 +30,8 @@ public class LocalDBHelper extends SQLiteOpenHelper {
             + ITEM_TABLE_NAME + "( " + ITEM_COLUMN_ID
             + " integer primary key autoincrement, " + ITEM_COLUMN_NAME
             + " text not null, " + ITEM_COLUMN_INSERTION_DATE
-            + " text, " + ITEM_COLUMN_EXPIRE_DATE
-            + " text);";
+            + " date, " + ITEM_COLUMN_EXPIRE_DATE
+            + " date);";
 
     /**
      * Class Constructor
